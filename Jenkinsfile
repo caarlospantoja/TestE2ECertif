@@ -32,7 +32,7 @@ pipeline {
                 
                 failure {
                     emailext (
-                        subject: "Pipeline Failed: ${currentBuild.fullDisplayName}",
+                        subject: "Pipeline Failed:",
                         body: "A sua pipeline falhou. Verifique os logs para mais informações.",
                         to: 'testmulticert@yopmail.com',
                     )
