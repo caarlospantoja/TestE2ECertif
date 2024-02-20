@@ -26,7 +26,7 @@ pipeline {
                     emailext (
                         subject: "Pipeline Successful: ${currentBuild.fullDisplayName}",
                         body: "A sua pipeline foi executada com sucesso.",
-                        to: 'testmulticert@yopmail.com',
+                        to: 'caarlospantoja@gmail.com',
                     )
                 }
                 
@@ -34,7 +34,7 @@ pipeline {
                     emailext (
                         subject: "Pipeline Failed:",
                         body: "A sua pipeline falhou. Verifique os logs para mais informações.",
-                        to: 'testmulticert@yopmail.com',
+                        to: 'caarlospantoja@gmail.com',
                     )
                 }
             }
