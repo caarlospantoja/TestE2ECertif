@@ -1,43 +1,29 @@
 pipeline {
     agent any
-    
-    tools {
-        maven 'MAVEN'
-    }
- 
+
     stages {
-        stage('Test') {
+        stage('Checkout') {
             steps {
-                sh "mvn clean test"
+                git branch: 'main', url: 'https://bitbucket.org/usuario/repo.git'
             }
- 
-            post {
-                success {
-                    publishHTML([
-                        allowMissing: false, 
-                        alwaysLinkToLastBuild: false, 
-                        keepAll: false, 
-                        reportDir: '', 
-                        reportFiles: 'index.html', 
-                        reportName: 'HTML Report', 
-                        reportTitles: '', 
-                        useWrapperFileDirectly: true
-                    ])
-                    emailext (
-                        subject: "Pipeline Successful: ${currentBuild.fullDisplayName}",
-                        body: "A sua pipeline foi executada com sucesso.",
-                        to: 'caarlospantoja@gmail.com',
-                    )
-                }
-                
-                failure {
-                    emailext (
-                        subject: "Pipeline Failed:",
-                        body: "A sua pipeline falhou. Verifique os logs para mais informações.",
-                        to: 'caarlospantoja@gmail.com',
-                    )
-                }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'mvn clean install'
             }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+    }
+
+    post {
+        always {
+            publishTestNGResults failedTestsMarkBuildAsFailure: true, unstableThreshold: 0
         }
     }
 }
