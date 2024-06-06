@@ -46,7 +46,8 @@ public class LoginSteps {
     }
 
     @Then("Eu sou direcionado para a página de de pedidos")
-    public void redirecionar_pagina_pedidos() {
+    public void redirecionar_pagina_pedidos() throws InterruptedException {
+        Thread.sleep(3000);
         Assert.assertTrue(driver.getCurrentUrl().contains("https://teste.multicert.com/onlinestore/orders-list"));
     }
 }
