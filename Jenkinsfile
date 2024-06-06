@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://bitbucket.org/usuario/repo.git'
+                git branch: 'master', url: 'https://github.com/caarlospantoja/TestE2ECertif.git'
             }
         }
 
@@ -16,7 +16,7 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                sh 'mvn test'
+                sh ' mvn test -Denv=test'
             }
         }
     }
