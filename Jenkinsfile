@@ -1,29 +1,31 @@
 pipeline {
     agent any
 
-    stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'master', url: 'https://github.com/caarlospantoja/TestE2ECertif.git'
-            }
-        }
-
-        stage('Install Dependencies') {
-            steps {
-                sh 'mvn clean install'
-            }
-        }
-
-        stage('Run Tests') {
-            steps {
-                sh ' mvn test -Denv=test'
-            }
-        }
+    tools {
+        maven 'MAVEN'
     }
 
-    post {
-        always {
-            publishTestNGResults failedTestsMarkBuildAsFailure: true, unstableThreshold: 0
+    stages {
+        stage('Test') {
+            steps {
+                sh "mvn test"
+            }
+
+            post {
+                // If Maven was able to run the tests, even if some of the test
+                // failed, record the test results and archive the jar file.
+                success {
+                   publishHTML([
+                       allowMissing: false,
+                       alwaysLinkToLastBuild: false,
+                       keepAll: false,
+                       reportDir: '',
+                       reportFiles: 'index.html',
+                       reportName: 'HTML Report',
+                       reportTitles: '',
+                       useWrapperFileDirectly: true])
+                }
+            }
         }
     }
 }
